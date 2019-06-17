@@ -6,6 +6,11 @@ ThisBuild / organizationName := "yuchen"
 scalastyleFailOnWarning := true
 scalastyleFailOnError := true
 
+coverageEnabled := true
+coverageMinimum := 100
+coverageFailOnMinimum := true
+coverageExcludedPackages := "<empty>;Main"
+
 val unfilteredVersion = "0.10.0-M4"
 
 lazy val unfilteredDependencies = Seq("filter", "jetty", "specs2")
