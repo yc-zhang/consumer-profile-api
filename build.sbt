@@ -3,6 +3,9 @@ ThisBuild / version          := "0.1.0-SNAPSHOT"
 ThisBuild / organization     := "com.yuchen"
 ThisBuild / organizationName := "yuchen"
 
+scalastyleFailOnWarning := true
+scalastyleFailOnError := true
+
 val unfilteredVersion = "0.10.0-M4"
 
 lazy val unfilteredDependencies = Seq("filter", "jetty", "specs2")
