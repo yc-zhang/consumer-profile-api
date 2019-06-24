@@ -11,6 +11,10 @@ coverageMinimum := 100
 coverageFailOnMinimum := true
 coverageExcludedPackages := "<empty>;Main"
 
+enablePlugins(JavaAppPackaging)
+mainClass in Compile := Some("Main")
+discoveredMainClasses in Compile := Seq()
+
 val unfilteredVersion = "0.10.0-M4"
 
 lazy val unfilteredDependencies = Seq("filter", "jetty", "specs2")

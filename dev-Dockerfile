@@ -1,0 +1,8 @@
+FROM openjdk:8-jdk
+
+WORKDIR /app
+COPY . ./
+RUN ./sbt update
+
+WORKDIR /
+RUN rm -rf app
