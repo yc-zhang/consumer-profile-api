@@ -58,3 +58,14 @@ docker-compose run dev bash
 # and package
 ./sbt universal:packageBin
 ```  
+
+### Build docker image
+
+```bash
+./script/build-image.sh
+```
+
+Then you could run the image like:
+```bash
+docker run -p 8080:8080 consumer-profile-api
+```

@@ -3,6 +3,8 @@ ThisBuild / version          := "0.1.0-SNAPSHOT"
 ThisBuild / organization     := "com.yuchen"
 ThisBuild / organizationName := "yuchen"
 
+maintainer := "yuchen"
+
 scalastyleFailOnWarning := true
 scalastyleFailOnError := true
 
