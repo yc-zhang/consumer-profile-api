@@ -1,41 +1,44 @@
-import javax.servlet.http.HttpServletRequest
-import unfiltered.filter.Plan
-import unfiltered.request.{HttpRequest, _}
-import unfiltered.response._
+import io.circe.Json
+import profile.{ProfileRepo, ProfileSchema}
+import sangria.execution.Executor
+import sangria.macros._
+import sangria.marshalling.circe._
 
-object Main extends Main with App {
-  start()
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
+
+
+object Main extends App {
+  val query =
+    graphql"""
+    query MyProfile {
+      profile(id: "2") {
+        name
+        age
+        address {
+          postCode, lines
+        }
+      }
+      profiles {
+        name
+      }
+    }
+  """
+
+  val result: Future[Json] =
+    Executor.execute(ProfileSchema.schema, query, new ProfileRepo)
+
+  result.onComplete({
+    case Success(value) => {
+      println("done")
+      println(value)
+    }
+    case Failure(exception) => {
+      println("error")
+      println(exception)
+    }
+  })
+
+  Thread.sleep(1000)
 }
-
-class Main {
-  val port = 8080
-
-  type Request = HttpRequest[HttpServletRequest]
-
-  val echo: Plan = unfiltered.filter.Planify {
-    case GET(Path("/helloworld")) => Ok ~> ResponseString("hello world")
-    case req @ GET(Path("/helloworld_2")) => process(helloWorld2)(req)
-  }
-
-  def process[A, B](business: A => BusinessResult[B])(req: Request)
-                   (implicit parse: Request => A, toR: B => String):
-  ResponseFunction[Any] = {
-    val result: BusinessResult[B] = business.apply(parse(req))
-    result.status ~> ResponseString(toR(result.result))
-  }
-
-  def start(): Unit = {
-    unfiltered.jetty.Server.http(port).plan(echo).run()
-  }
-
-  def helloWorld2(name: String): BusinessResult[String] = {
-    BusinessResult(Ok, s"$name, hello and welcome!")
-  }
-
-  implicit def toHello(request: Request): String = {
-    request.parameterValues("name").head
-  }
-}
-
-
-case class BusinessResult[A](status: Status, result: A)

@@ -17,13 +17,12 @@ enablePlugins(JavaAppPackaging)
 mainClass in Compile := Some("Main")
 discoveredMainClasses in Compile := Seq()
 
-val unfilteredVersion = "0.10.0-M4"
-
-lazy val unfilteredDependencies = Seq("filter", "jetty", "specs2")
-    .map(c => "ws.unfiltered" %% s"unfiltered-$c" % unfilteredVersion)
+lazy val sangriaDependencies = Seq(
+  "org.sangria-graphql" %% "sangria" % "1.4.2",
+  "org.sangria-graphql" %% "sangria-circe" % "1.2.1")
 
 lazy val root = (project in file("."))
   .settings(
     name := "consumer-profile-api",
-    libraryDependencies ++= unfilteredDependencies
+    libraryDependencies ++= sangriaDependencies
   )
